@@ -22,3 +22,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+server:
+  address: localhost
+  port: 8020
