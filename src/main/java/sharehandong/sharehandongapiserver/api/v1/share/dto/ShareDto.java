@@ -13,7 +13,7 @@ public class ShareDto {
     private Long idx;
     private Long writer;
     private String title;
-    private String desc;
+    private String content;
     private Integer catego;
     private Integer state;
     private LocalDateTime createdDate;
@@ -24,7 +24,7 @@ public class ShareDto {
                 .idx(idx)
                 .writer(writer)
                 .title(title)
-                .desc(desc)
+                .content(content)
                 .catego(catego)
                 .state(state)
                 .build();
@@ -32,12 +32,12 @@ public class ShareDto {
     }
 
     @Builder
-    public ShareDto(Long idx, String title, String desc, Long writer, LocalDateTime createdDate, LocalDateTime modifiedDate,
+    public ShareDto(Long idx, String title, String content, Long writer, LocalDateTime createdDate, LocalDateTime modifiedDate,
                     Integer catego, Integer state) {
         this.idx = idx;
         this.writer = writer;
         this.title = title;
-        this.desc = desc;
+        this.content = content;
         this.catego = catego;
         this.state = state;
         this.createdDate = createdDate;

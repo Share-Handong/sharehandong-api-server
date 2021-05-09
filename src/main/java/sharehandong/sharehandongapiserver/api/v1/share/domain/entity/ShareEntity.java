@@ -3,13 +3,18 @@ package sharehandong.sharehandongapiserver.api.v1.share.domain.entity;
 import lombok.AccessLevel;
 import lombok.*;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "shr_h_item")
 public class ShareEntity extends TimeEntity {
 
     @Id
@@ -23,7 +28,7 @@ public class ShareEntity extends TimeEntity {
     private String title;
 
     @Column
-    private String desc;
+    private String content;
 
     @Column
     private Integer catego;
@@ -31,13 +36,14 @@ public class ShareEntity extends TimeEntity {
     @Column
     private Integer state;
 
+
     @Builder
-    public ShareEntity(Long idx, String title, String desc, Long writer,
+    public ShareEntity(Long idx, String title, String content, Long writer,
                        Integer catego, Integer state) {
         this.idx = idx;
         this.writer = writer;
         this.title = title;
-        this.desc = desc;
+        this.content = content;
         this.catego = catego;
         this.state = state;
     }
