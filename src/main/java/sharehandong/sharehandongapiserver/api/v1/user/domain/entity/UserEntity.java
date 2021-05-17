@@ -1,11 +1,14 @@
 package sharehandong.sharehandongapiserver.api.v1.user.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import sharehandong.sharehandongapiserver.util.Common;
 import sharehandong.sharehandongapiserver.util.UserRole;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shr_h_user")
@@ -14,9 +17,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-public class UserEntity extends Common implements Serializable {
+public class UserEntity {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long idx;
+
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String userName;
 
     @Setter
     @Column(nullable = false)
@@ -26,5 +36,17 @@ public class UserEntity extends Common implements Serializable {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @CreationTimestamp
+    @Column(nullable = false, length = 20, updatable = false)
+    private LocalDateTime createdAt;                        // 등록 일자
+
+    @UpdateTimestamp
+    @Column(length = 20)
+    private LocalDateTime updatedAt;
+
+    @Setter
+    @Column
+    private Boolean isEnable;
 
 }
