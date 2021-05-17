@@ -16,11 +16,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserEntity login(final LoginDto loginDto) {
+    public UserEntity signUp(final LoginDto loginDto) {
         final UserEntity user = UserEntity.builder()
                 .email(loginDto.getEmail())
                 .pw(passwordEncoder.encode(loginDto.getPw()))
                 .role(UserRole.ROLE_USER)
+                .userName(loginDto.getName())
+                .isEnable(true)
                 .build();
 
         return userRepository.save(user);

@@ -3,6 +3,10 @@ package sharehandong.sharehandongapiserver.config.jwt;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.MyUserDetails;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.UserEntity;
 import sharehandong.sharehandongapiserver.util.TokenUtils;
@@ -19,6 +23,6 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         // error 시 getUser => getUserEntity
         final UserEntity user = ((MyUserDetails)authentication.getPrincipal()).getUser();
         final String token = TokenUtils.generateJwtToken(user);
-        response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE+" "+token);
+        response.addHeader("Refresh_token", token);
     }
 }

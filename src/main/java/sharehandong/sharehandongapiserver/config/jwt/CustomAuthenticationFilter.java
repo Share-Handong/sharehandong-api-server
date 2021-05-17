@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.UserEntity;
+import sharehandong.sharehandongapiserver.api.v1.user.dto.LoginDto;
 import sharehandong.sharehandongapiserver.exception.InputNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken authRequest;
         try {
-            final UserEntity user = new ObjectMapper().readValue(request.getInputStream(), UserEntity.class);
+            System.out.println(request.getInputStream());
+            final LoginDto user = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
             authRequest = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPw());
         } catch (IOException exception) {
             throw new InputNotFoundException();

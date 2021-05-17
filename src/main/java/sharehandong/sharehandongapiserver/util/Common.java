@@ -17,7 +17,7 @@ public abstract class Common implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     private Long id;                                        // 고유번호
 
     @CreationTimestamp

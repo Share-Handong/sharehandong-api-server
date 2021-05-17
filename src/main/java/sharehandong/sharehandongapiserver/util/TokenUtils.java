@@ -57,6 +57,7 @@ public final class TokenUtils {
     private static Date createExpireDateForOneYear() {
         // 토큰 만료시간은 30일으로 설정
         Calendar c = Calendar.getInstance();
+//        c.add(Calendar.DATE, 30);
         c.add(Calendar.DATE, 30);
         return c.getTime();
     }
@@ -76,6 +77,8 @@ public final class TokenUtils {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("email", user.getEmail());
+        claims.put("name", user.getUserName());
+        claims.put("pw", user.getPw());
         claims.put("role", user.getRole());
 
         return claims;
@@ -91,12 +94,23 @@ public final class TokenUtils {
                 .parseClaimsJws(token).getBody();
     }
 
-    private static String getUserEmailFromToken(String token) {
+    public static String getUserEmailFromToken(String token) {
         Claims claims = getClaimsFormToken(token);
         return (String) claims.get("email");
     }
 
-    private static UserRole getRoleFromToken(String token) {
+    public static String getUserNameFromToken(String token) {
+        Claims claims = getClaimsFormToken(token);
+        return (String) claims.get("name");
+    }
+
+    public static String getUserPwFromToken(String token) {
+        Claims claims = getClaimsFormToken(token);
+        return (String) claims.get("pw");
+    }
+
+
+    public static UserRole getRoleFromToken(String token) {
         Claims claims = getClaimsFormToken(token);
         return (UserRole) claims.get("role");
     }
