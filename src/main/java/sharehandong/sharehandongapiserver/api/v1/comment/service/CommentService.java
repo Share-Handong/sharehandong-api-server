@@ -6,9 +6,12 @@ import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.repository.CommentRepository;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.repository.CreateCommentForm;
 import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentDto;
+import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentRequestDto;
+import sharehandong.sharehandongapiserver.api.v1.comment.repository.CommentRepository;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.BoardEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.BoardRepository;
+import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.ShareRepository;
 import sharehandong.sharehandongapiserver.api.v1.share.dto.BoardDto;
 
 import javax.transaction.Transactional;
@@ -18,53 +21,45 @@ import java.util.List;
 @Service
 public class CommentService {
     private CommentRepository commentRepository;
-
-    public CommentService(CommentRepository commentRepository) {
+    private final ShareRepository shareRepository;
+    public CommentService(CommentRepository commentRepository, ShareRepository shareRepository) {
         this.commentRepository = commentRepository;
+        this.shareRepository = shareRepository;
     }
 
     @Transactional
-    public Long saveComment(CommentDto commentDto) {
-        return commentRepository.save(commentDto.toEntity()).getIdx();
+    public void saveComment(ShareEntity shareEntity, CommentRequestDto commentRequestDto) {//, Account account
+
+        Comment comment = Comment.builder().content(commentRequestDto.getComment()).build();
+        Comment newComment = commentRepository.save(comment);
+        shareEntity.addComment(newComment);
+        //account.addComment(newComment);
     }
 
     @Transactional
-    public List<CommentDto> getCommentList() {
-        List<Comment> commentList = commentRepository.findAll();
-        List<CommentDto> commentDtoList = new ArrayList<>();
-
-        for(Comment comment : commentList) {
-            CommentDto commentDto = CommentDto.builder()
-                    .idx(comment.getIdx())
-                    .item_idx(comment.getItem_idx())
-                    .user_idx(comment.getUser_idx())
-                    .content(comment.getContent())
-                    .del(comment.getDel())
-                    .c_date(comment.getC_date())
-                    .build();
-            commentDtoList.add(commentDto);
-        }
-        return commentDtoList;
+    public void updateComment(Long commentId, String stringComment) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
+        );
+        comment.updateComment(stringComment);
     }
-
     @Transactional
-    public CommentDto getComment(Long id) {
-        Comment comment = commentRepository.findById(id).get();
+    public void deleteComment(Long postId, Long commentId) {//, Long accountId
+        Comment deleteComment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+        );
 
-        CommentDto commentDto = CommentDto.builder()
-                .idx(comment.getIdx())
-                .item_idx(comment.getItem_idx())
-                .user_idx(comment.getUser_idx())
-                .content(comment.getContent())
-                .del(comment.getDel())
-                .c_date(comment.getC_date())
-                .build();
-        return commentDto;
-    }
+        ShareEntity shareEntity = shareRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("아이디가 존재하지 않습니다")
+        );
+//        Account account = accountRepository.findById(accountId).orElseThrow(
+//                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+//        );
 
-    @Transactional
-    public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+        shareEntity.deleteComment(deleteComment);
+        //account.deleteComment(deleteComment);
+        commentRepository.deleteById(deleteComment.getIdx());
+
     }
 }
 

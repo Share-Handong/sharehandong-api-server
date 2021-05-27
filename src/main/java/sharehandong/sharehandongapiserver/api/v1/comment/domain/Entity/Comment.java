@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
     @Id
     @GeneratedValue
@@ -38,15 +40,8 @@ public class Comment {
     @Column(name="del")
     private int del;
 
-    @Builder
-    public Comment(Long idx, Long item_idx, Long user_idx, String content, LocalDateTime c_date, int del) {
-        this.idx = idx;
-        this.item_idx = item_idx;
-        this.user_idx = user_idx;
-        this.content = content;
-        this.c_date = c_date;
-        this.del = del;
+    public void updateComment(String tempComment) {
+        this.content = tempComment;
     }
-
 }
 
