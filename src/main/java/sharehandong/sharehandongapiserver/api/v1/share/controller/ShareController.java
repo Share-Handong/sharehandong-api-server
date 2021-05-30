@@ -32,10 +32,10 @@ public class ShareController {
     private final FileService fileService;
     private ShareService shareService;
 
-    public ShareController(ShareService shareService, FileService fileService) {
-        this.shareService = shareService;
-        this.fileService = fileService;
-    }
+//    public ShareController(ShareService shareService, FileService fileService) {
+//        this.shareService = shareService;
+//        this.fileService = fileService;
+//    }
 
     @GetMapping("/shareList")
     public String shareList(Model model) {

@@ -1,7 +1,9 @@
 package sharehandong.sharehandongapiserver.api.v1.comment.controller;
 
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
 import sharehandong.sharehandongapiserver.api.v1.comment.repository.CommentRepository;
@@ -14,43 +16,39 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@RestController
+@Controller
+@AllArgsConstructor
+@RequestMapping("/api/v1")
 public class CommentController {
 
     private final CommentService commentService;
     private final ShareRepository shareRepository;
     private final CommentRepository commentRepository;
 
-    public CommentController(CommentService commentService, ShareRepository shareRepository, CommentRepository commentRepository) {
-        this.commentService = commentService;
-        this.shareRepository = shareRepository;
-        this.commentRepository = commentRepository;
-    }
-
-    @GetMapping("/post/{postId}/comment")
-    public List<Comment> getCommentsByRecipeNo(@PathVariable Long postId) {
-
-        return commentRepository.findByPostId(postId);
-
-    }
-
-    @PostMapping("/post/{postId}/comment")
-    public ResponseEntity saveComment(@PathVariable Long postId, /*@AuthenticationPrincipal UserDetailsImpl userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
-        ShareEntity post = shareRepository.findById(postId).orElse(null);
+    @PostMapping("/comment/item/{itemIdx}")
+    public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx, /*@AuthenticationPrincipal UserDetailsImpl userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
+        ShareEntity post = shareRepository.findById(itemIdx).orElse(null);
         if(post == null) {
             return ResponseEntity.badRequest().build();
         }
-        commentService.saveComment(post, commentRequestDto);//, userDetails.getAccount()
+        commentService.saveComment(commentRequestDto);//post, userDetails.getAccount()
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/post/{postId}/comment/{commentId}")
-    public void updateComment(@PathVariable Long postId, @PathVariable Long commentId,
-                              @RequestBody String comment) throws Exception {
-        commentService.updateComment(commentId, comment);
+    @GetMapping("/comment/item/{itemIdx}")
+    public List<Comment> getCommentsByRecipeNo(@PathVariable("itemIdx")  Long itemIdx) {
+
+        return commentRepository.findByPostId(itemIdx);
+
     }
-    @DeleteMapping("/posts/{postId}/comments/{commentId}")
-    public void deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {//, @AuthenticationPrincipal UserDetailsImpl userDetails
-        commentService.deleteComment(postId, commentId);//, userDetails.getAccount().getId()
+
+    @PutMapping("/comment/item/{itemIdx}/{commentIdx}")
+    public void updateComment(@PathVariable("itemIdx")  Long itemIdx, @PathVariable("commentIdx")  Long commentIdx,
+                              @RequestBody String comment) throws Exception {
+        commentService.updateComment(commentIdx, comment);
+    }
+    @DeleteMapping("/comment/item/{itemIdx}/{commentIdx}")
+    public void deleteComment(@PathVariable("itemIdx") Long itemIdx, @PathVariable("commentIdx") Long commentId) {//, @AuthenticationPrincipal UserDetailsImpl userDetails
+        commentService.deleteComment(itemIdx ,commentId);//postId, , userDetails.getAccount().getId()
     }
 }

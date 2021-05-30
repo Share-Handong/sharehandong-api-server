@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
 @Setter
-@EqualsAndHashCode(of = "id")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Entity(name = "share_h_item_comment")
+@Entity
+@Table(name = "share_h_item_comment")
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
     @Id
@@ -39,6 +39,17 @@ public class Comment {
 
     @Column(name="del")
     private int del;
+
+    @Builder
+    public Comment(Long idx, Long item_idx, Long user_idx, String content,
+                   LocalDateTime c_date, int del) {
+        this.idx = idx;
+        this.item_idx = item_idx;
+        this.user_idx = user_idx;
+        this.content = content;
+        this.c_date = c_date;
+        this.del = del;
+    }
 
     public void updateComment(String tempComment) {
         this.content = tempComment;
