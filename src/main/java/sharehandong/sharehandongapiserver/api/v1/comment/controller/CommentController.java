@@ -3,6 +3,7 @@ package sharehandong.sharehandongapiserver.api.v1.comment.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
@@ -12,6 +13,8 @@ import sharehandong.sharehandongapiserver.api.v1.comment.service.CommentService;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.ShareRepository;
 import org.springframework.http.ResponseEntity;
+import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.MyUserDetails;
+import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.UserEntity;
 
 
 import java.util.List;
@@ -26,19 +29,21 @@ public class CommentController {
     private final CommentRepository commentRepository;
 
     @PostMapping("/comment/item/{itemIdx}")
-    public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx, /*@AuthenticationPrincipal UserDetailsImpl userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx, /*@AuthenticationPrincipal MyUserDetails userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
         ShareEntity post = shareRepository.findById(itemIdx).orElse(null);
         if(post == null) {
+            System.out.println("post NULL");
             return ResponseEntity.badRequest().build();
         }
-        commentService.saveComment(commentRequestDto);//post, userDetails.getAccount()
+        //long userIdx = userDetails.getUserIdx();
+        commentService.saveComment(/*userIdx,*/itemIdx,commentRequestDto);//post, userDetails.getAccount()
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/comment/item/{itemIdx}")
     public List<Comment> getCommentsByRecipeNo(@PathVariable("itemIdx")  Long itemIdx) {
 
-        return commentRepository.findByPostId(itemIdx);
+        return commentRepository.findAllByItemIdx(itemIdx);
 
     }
 

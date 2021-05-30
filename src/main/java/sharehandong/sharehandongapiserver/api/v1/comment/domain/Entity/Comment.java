@@ -23,10 +23,10 @@ public class Comment {
     private Long idx;
 
     @Column(name="item_idx")
-    private Long item_idx;
+    private Long itemIdx;
 
     @Column(name="user_idx")
-    private Long user_idx;
+    private Long userIdx;
 
     @Lob
     @Column(name="content")
@@ -35,19 +35,19 @@ public class Comment {
     @CreatedDate
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @Column(name="c_date")
-    private LocalDateTime c_date;
+    private LocalDateTime cDate;
 
     @Column(name="del")
     private int del;
 
     @Builder
-    public Comment(Long idx, Long item_idx, Long user_idx, String content,
-                   LocalDateTime c_date, int del) {
+    public Comment(Long idx, Long itemIdx, Long userIdx, String content,
+                   LocalDateTime cDate, int del) {
         this.idx = idx;
-        this.item_idx = item_idx;
-        this.user_idx = user_idx;
+        this.itemIdx = itemIdx;
+        this.userIdx = userIdx;
         this.content = content;
-        this.c_date = c_date;
+        this.cDate = cDate;
         this.del = del;
     }
 

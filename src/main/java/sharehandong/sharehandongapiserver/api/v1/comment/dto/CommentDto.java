@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentDto {
     private Long idx;
-    private Long item_idx;
-    private Long user_idx;
+    private Long itemIdx;
+    private Long userIdx;
     private String content;
     private LocalDateTime c_date;
     private int del;
@@ -23,19 +23,19 @@ public class CommentDto {
     public Comment toEntity() {
         Comment build = Comment.builder()
                 .idx(idx)
-                .item_idx(item_idx)
+                .itemIdx(itemIdx)
                 .content(content)
-                .user_idx(user_idx)
+                .userIdx(userIdx)
                 .del(del)
-                .c_date(LocalDateTime.now())
+                .cDate(LocalDateTime.now())
                 .build();
         return build;
     }
     @Builder
-    public CommentDto(Long idx, Long item_idx, Long user_idx, String content, LocalDateTime c_date, int del) {
+    public CommentDto(Long idx, Long itemIdx, Long userIdx, String content, LocalDateTime c_date, int del) {
         this.idx = idx;
-        this.item_idx = item_idx;
-        this.user_idx = user_idx;
+        this.itemIdx = itemIdx;
+        this.userIdx = userIdx;
         this.content = content;
         this.c_date = c_date;
         this.del = del;
