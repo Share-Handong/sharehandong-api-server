@@ -42,10 +42,10 @@ public class ShareEntity extends TimeEntity {
     private Integer state;
 
     @Column(name = "created_date")
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
 
     @Column(name = "modified_date")
-    private LocalDateTime modified_date;
+    private LocalDateTime modifiedDate;
 
 
     @Builder
@@ -57,8 +57,8 @@ public class ShareEntity extends TimeEntity {
         this.content = content;
         this.catego = catego;
         this.state = state;
-        this.created_date = created_date;
-        this.modified_date = modified_date;
+        this.createdDate = created_date;
+        this.modifiedDate = modified_date;
     }
 
 
@@ -112,18 +112,18 @@ public class ShareEntity extends TimeEntity {
     }
 
     public LocalDateTime getCreated_date() {
-        return created_date;
+        return createdDate;
     }
 
     public void setCreated_date(LocalDateTime created_date) {
-        this.created_date = created_date;
+        this.createdDate = created_date;
     }
 
     public LocalDateTime getModified_date() {
-        return modified_date;
+        return modifiedDate;
     }
 
     public void setModified_date(LocalDateTime modified_date) {
-        this.modified_date = modified_date;
+        this.modifiedDate = modified_date;
     }
 }

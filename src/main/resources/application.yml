@@ -26,3 +26,5 @@ logging:
 server:
   address: localhost
   port: 8020
+  servlet:
+    context-path: /somecontextpath
