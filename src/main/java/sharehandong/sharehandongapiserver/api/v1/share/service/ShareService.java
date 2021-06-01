@@ -29,7 +29,7 @@ public class ShareService {
     }
 
     @Transactional
-    public List<ShareDto> getBoardList() {
+    public List<ShareDto> getShareList() {
         List<ShareEntity> shareList = shareRepository.findAll();
         List<ShareDto> shareDtoList = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class ShareService {
                     .writer(share.getWriter())
                     .title(share.getTitle())
                     .content(share.getContent())
-                    .createdDate(share.getCreated_date())
+                    .createdAt(share.getCreatedAt())
                     .build();
             shareDtoList.add(shareDto);
         }
@@ -55,7 +55,7 @@ public class ShareService {
                 .writer(share.getWriter())
                 .title(share.getTitle())
                 .content(share.getContent())
-                .createdDate(share.getCreated_date())
+                .createdAt(share.getCreatedAt())
                 .build();
         return shareDto;
     }
