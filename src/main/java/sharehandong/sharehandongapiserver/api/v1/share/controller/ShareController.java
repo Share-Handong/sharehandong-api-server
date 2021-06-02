@@ -54,10 +54,9 @@ public class ShareController {
     }
 
     @PutMapping("/share/item/{id}") //글 업데이트
-    public ResponseEntity<?> edit(@PathVariable("id") Long id, Model model) {
-        ShareDto shareDto = shareService.getPost(id);
-        model.addAttribute("post", shareDto);
-        return ResponseEntity.ok(shareDto);
+    public ResponseEntity<?> edit(@PathVariable("id") Long id, ShareDto shareDto) {
+
+        return ResponseEntity.ok(shareService.updatePost(id,shareDto));
     }
 
 }

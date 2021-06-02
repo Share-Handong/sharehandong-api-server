@@ -64,4 +64,22 @@ public class ShareService {
     public void deletePost(Long id) {
         shareRepository.deleteById(id);
     }
+
+    @javax.transaction.Transactional
+    public Long updatePost(Long id,ShareDto shareDto) {
+        ShareEntity defaultShareDto  = shareRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당글 존재하지 않습니다.")
+        );
+
+        defaultShareDto.setCatego(shareDto.getCatego());
+        defaultShareDto.setContent(shareDto.getContent());
+        defaultShareDto.setState(shareDto.getState());
+        defaultShareDto.setTitle(shareDto.getTitle());
+        defaultShareDto.setWriter(shareDto.getWriter());
+
+        return id;
+    }
+
+
 }
+
