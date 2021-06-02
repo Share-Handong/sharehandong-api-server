@@ -7,10 +7,15 @@ import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
 import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentDto;
 import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentRequestDto;
 import sharehandong.sharehandongapiserver.api.v1.comment.repository.CommentRepository;
+import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.BoardEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.ShareRepository;
+import sharehandong.sharehandongapiserver.api.v1.share.dto.BoardDto;
+import sharehandong.sharehandongapiserver.api.v1.share.dto.ShareDto;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -61,6 +66,27 @@ public class CommentService {
         commentRepository.deleteById(deleteComment.getIdx());
 
     }
+
+    @Transactional
+    public List<CommentDto> getCommentList() {
+        List<Comment> commentList = commentRepository.findAll();
+        List<CommentDto> commentDtoList = new ArrayList<>();
+
+        for(Comment comment : commentList) {
+            CommentDto commentDto = CommentDto.builder()
+                    .idx(comment.getIdx())
+                    .itemIdx(comment.getItemIdx())
+                    .userIdx(comment.getUserIdx())
+                    .content(comment.getContent())
+                    .del(comment.getDel())
+                    .c_date(comment.getCDate())
+                    .build();
+            commentDtoList.add(commentDto);
+        }
+        return commentDtoList;
+    }
+
+    @Transactional
     public CommentDto getCommend(Long id) {
         Optional<Comment> commentWrapper = commentRepository.findById(id);
         Comment comment = commentWrapper.get();

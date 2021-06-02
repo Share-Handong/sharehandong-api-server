@@ -5,14 +5,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
+import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentDto;
 import sharehandong.sharehandongapiserver.api.v1.comment.repository.CommentRepository;
 import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentRequestDto;
 import sharehandong.sharehandongapiserver.api.v1.comment.service.CommentService;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.ShareRepository;
 import org.springframework.http.ResponseEntity;
+import sharehandong.sharehandongapiserver.api.v1.share.dto.BoardDto;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.MyUserDetails;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.UserEntity;
 
@@ -40,12 +43,24 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+//    @GetMapping("/comment/item/{itemIdx}")
+//    public List<Comment> getCommentsByRecipeNo(@PathVariable("itemIdx")  Long itemIdx) {
+//        List<Comment> l = commentRepository.findAllByItemIdx(itemIdx);
+//        System.out.println("DFSDFASDFASDFWQEGWEFDWFDWQGWDGQWDGQ");
+//        System.out.println(l);
+//        return commentRepository.findAllByItemIdx(itemIdx);
+//
+//    }
+
     @GetMapping("/comment/item/{itemIdx}")
-    public List<Comment> getCommentsByRecipeNo(@PathVariable("itemIdx")  Long itemIdx) {
-
-        return commentRepository.findAllByItemIdx(itemIdx);
-
+    public ResponseEntity<?> list(Model model, @PathVariable("itemIdx")  Long itemIdx) {
+        List<CommentDto> commentDtoList = commentService.getCommentList();
+        model.addAttribute("commentlist", commentDtoList);
+        //return commentRepository.findAllByItemIdx(itemIdx);
+        return ResponseEntity.ok(commentDtoList);
     }
+
+
 
     @PutMapping("/comment/item/{itemIdx}/{commentIdx}")
     public void updateComment(@PathVariable("itemIdx")  Long itemIdx, @PathVariable("commentIdx")  Long commentIdx,
