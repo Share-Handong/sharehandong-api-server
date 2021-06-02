@@ -50,4 +50,7 @@ public class MyUserDetails implements UserDetails {
         return user.getIsEnable();
     }
 
+    public Long getUserIdx() {
+        return user.getIdx();
+    }
 }
