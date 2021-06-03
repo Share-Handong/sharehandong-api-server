@@ -5,10 +5,8 @@ import lombok.*;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name="share_entity")
 @EntityListeners(AuditingEntityListener.class) /* JPA에게 해당 Entity는 Auditiong 기능을 사용함을 알립니다. */
-public class ShareEntity extends TimeEntity {
+public class ShareEntity {
 
 
     @Id
@@ -41,24 +39,25 @@ public class ShareEntity extends TimeEntity {
     @Column(name = "state")
     private Integer state;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdAt;                        // 등록 일자
 
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+    @UpdateTimestamp
+    @Column(length = 20)
+    private LocalDateTime updatedAt;
 
 
     @Builder
     public ShareEntity(Long idx, String title, String content, Long writer,
-                       Integer catego, Integer state,LocalDateTime created_date,LocalDateTime modified_date) {
+                       Integer catego, Integer state,LocalDateTime createdAt,LocalDateTime updatedAt) {
         this.idx = idx;
         this.writer = writer;
         this.title = title;
         this.content = content;
         this.catego = catego;
         this.state = state;
-        this.createdDate = created_date;
-        this.modifiedDate = modified_date;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
 
@@ -111,19 +110,6 @@ public class ShareEntity extends TimeEntity {
         this.state = state;
     }
 
-    public LocalDateTime getCreated_date() {
-        return createdDate;
-    }
 
-    public void setCreated_date(LocalDateTime created_date) {
-        this.createdDate = created_date;
-    }
 
-    public LocalDateTime getModified_date() {
-        return modifiedDate;
-    }
-
-    public void setModified_date(LocalDateTime modified_date) {
-        this.modifiedDate = modified_date;
-    }
 }

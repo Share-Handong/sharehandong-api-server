@@ -1,145 +1,64 @@
 package sharehandong.sharehandongapiserver.api.v1.share.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import sharehandong.sharehandongapiserver.api.v1.share.dto.BoardDto;
-import sharehandong.sharehandongapiserver.api.v1.share.dto.FileDto;
 import sharehandong.sharehandongapiserver.api.v1.share.dto.ShareDto;
-import sharehandong.sharehandongapiserver.api.v1.share.service.BoardService;
 import sharehandong.sharehandongapiserver.api.v1.share.service.FileService;
 import sharehandong.sharehandongapiserver.api.v1.share.service.ShareService;
-import sharehandong.sharehandongapiserver.util.MD5Generator;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1")
 public class ShareController {
     private final FileService fileService;
-    private ShareService shareService;
+    private final ShareService shareService;
 
 //    public ShareController(ShareService shareService, FileService fileService) {
 //        this.shareService = shareService;
 //        this.fileService = fileService;
 //    }
 
-    @GetMapping("/shareList")
-    public String shareList(Model model) {
-        List<ShareDto> shareDtoList = shareService.getBoardList();
-        model.addAttribute("postList", shareDtoList);
-        return "board/list.html";
-    }
-
-    @GetMapping("/post")
-    public String post() {
-        return "board/post.html";
-    }
-
-//    @PostMapping("/post")
-//    public String write(@RequestParam("file") MultipartFile files, ShareDto shareDto) {
+    @PostMapping("/share/item")// 글 등록 post
+    public ResponseEntity<?> write(ShareDto shareDto) {
 //        try {
-//            String origFilename = files.getOriginalFilename();
-//            String filename = new MD5Generator(origFilename).toString();
-//            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-//            System.out.println("check here 1");
-//            String savePath = System.getProperty("user.dir") + "\\files";
-//            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//            if (!new File(savePath).exists()) {
-//                try{
-//                    new File(savePath).mkdir();
-//                }
-//                catch(Exception e){
-//                    e.getStackTrace();
-//                }
-//            }
-//
-//            String filePath = savePath + "\\" + filename;
-//            files.transferTo(new File(filePath));
-//
-//            FileDto fileDto = new FileDto();
-//            fileDto.setOrigFilename(origFilename);
-//            fileDto.setFilename(filename);
-//            fileDto.setFilePath(filePath);
-//            Long fileId = fileService.saveFile(fileDto);
-//            shareDto.setFile_id(fileId);
 //            shareService.savePost(shareDto);
-//
 //        } catch(Exception e) {
 //            e.printStackTrace();
 //        }
-//        return "redirect:/";
-//    }
+        return ResponseEntity.ok(shareService.savePost(shareDto));
+    }
 
-    @GetMapping("/post/{id}")
-    public String detail(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/share/item/{id}") //글 한개 볼때 return
+    public ResponseEntity<?>  detail(@PathVariable("id") Long id) {
         ShareDto shareDto = shareService.getPost(id);
-        model.addAttribute("post", shareDto);
-        return "board/detail.html";
+//        model.addAttribute("post", shareDto);
+        return ResponseEntity.ok(shareDto);
     }
 
-    @GetMapping("/post/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        ShareDto shareDto = shareService.getPost(id);
-        model.addAttribute("post", shareDto);
-        return "board/edit.html";
-
+    @GetMapping("/share/item")// 글 리스트 볼때
+    public ResponseEntity<?> list(Model model) {
+        List<ShareDto> shareDtoList = shareService.getShareList();
+        model.addAttribute("postList", shareDtoList);
+        return ResponseEntity.ok(shareDtoList);
     }
 
-    @PutMapping("/post/edit/{id}")
-    public String update(ShareDto shareDto) {
-        shareService.savePost(shareDto);
-        return "redirect:/";
-    }
 
-    @DeleteMapping("/post/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/share/item/{id}") //글 삭제
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         shareService.deletePost(id);
-        return "redirect:/";
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/download/{fileId}")
-    public ResponseEntity<Resource> fileDownload(@PathVariable("fileId") Long fileId) throws IOException {
-        FileDto fileDto = fileService.getFile(fileId);
-        Path path = Paths.get(fileDto.getFilePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(path));
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDto.getOrigFilename() + "\"")
-                .body(resource);
+    @PutMapping("/share/item/{id}") //글 업데이트
+    public ResponseEntity<?> edit(@PathVariable("id") Long id, @RequestBody ShareDto shareDto) {
+
+        return ResponseEntity.ok(shareService.updatePost(id,shareDto));
     }
-
-
-
-//    @GetMapping("/post")
-//    public String write() {
-//        return "board/write.html";
-//    }
-//
-//
-//    @PostMapping("/share/share_form")
-//    public String write(ShareDto shareDto) {
-//        shareService.savePost(shareDto);
-//
-//        return "hi";
-//    }
-
-
-
-
-
 
 }

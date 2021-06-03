@@ -29,7 +29,7 @@ public class ShareService {
     }
 
     @Transactional
-    public List<ShareDto> getBoardList() {
+    public List<ShareDto> getShareList() {
         List<ShareEntity> shareList = shareRepository.findAll();
         List<ShareDto> shareDtoList = new ArrayList<>();
 
@@ -38,8 +38,10 @@ public class ShareService {
                     .idx(share.getIdx())
                     .writer(share.getWriter())
                     .title(share.getTitle())
+                    .catego(share.getCatego())
+                    .state(share.getState())
                     .content(share.getContent())
-                    .createdDate(share.getCreated_date())
+                    .createdAt(share.getCreatedAt())
                     .build();
             shareDtoList.add(shareDto);
         }
@@ -54,8 +56,10 @@ public class ShareService {
                 .idx(share.getIdx())
                 .writer(share.getWriter())
                 .title(share.getTitle())
+                .catego(share.getCatego())
+                .state(share.getState())
                 .content(share.getContent())
-                .createdDate(share.getCreated_date())
+                .createdAt(share.getCreatedAt())
                 .build();
         return shareDto;
     }
@@ -64,4 +68,22 @@ public class ShareService {
     public void deletePost(Long id) {
         shareRepository.deleteById(id);
     }
+
+    @javax.transaction.Transactional
+    public Long updatePost(Long id,ShareDto shareDto) {
+        ShareEntity defaultShareDto  = shareRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당글 존재하지 않습니다.")
+        );
+
+        defaultShareDto.setCatego(shareDto.getCatego());
+        defaultShareDto.setContent(shareDto.getContent());
+        defaultShareDto.setState(shareDto.getState());
+        defaultShareDto.setTitle(shareDto.getTitle());
+        defaultShareDto.setWriter(shareDto.getWriter());
+
+        return id;
+    }
+
+
 }
+
