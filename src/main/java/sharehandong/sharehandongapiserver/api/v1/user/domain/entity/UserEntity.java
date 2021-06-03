@@ -3,12 +3,14 @@ package sharehandong.sharehandongapiserver.api.v1.user.domain.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity;
 import sharehandong.sharehandongapiserver.util.Common;
 import sharehandong.sharehandongapiserver.util.UserRole;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "shr_h_user")
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long idx;
@@ -48,5 +51,8 @@ public class UserEntity {
     @Setter
     @Column
     private Boolean isEnable;
+
+    @OneToMany(mappedBy = "post")
+    private Collection<ShareEntity> sharePosting;
 
 }

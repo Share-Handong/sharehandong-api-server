@@ -3,12 +3,15 @@ package sharehandong.sharehandongapiserver.api.v1.share.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sharehandong.sharehandongapiserver.api.v1.share.dto.ItemDto;
 import sharehandong.sharehandongapiserver.api.v1.share.dto.ShareDto;
 import sharehandong.sharehandongapiserver.api.v1.share.service.FileService;
 import sharehandong.sharehandongapiserver.api.v1.share.service.ShareService;
+import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.MyUserDetails;
 
 import java.util.List;
 
@@ -25,14 +28,11 @@ public class ShareController {
 //    }
 
     @PostMapping("/share/item")// 글 등록 post
-    public ResponseEntity<?> write(ShareDto shareDto) {
-//        try {
-//            shareService.savePost(shareDto);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-        return ResponseEntity.ok(shareService.savePost(shareDto));
+    public ResponseEntity<?> write(@AuthenticationPrincipal MyUserDetails myUserDetails, ShareDto shareDto) {
+
+        return ResponseEntity.ok( new ItemDto(shareDto,myUserDetails.getUserName()));
     }
+
 
     @GetMapping("/share/item/{id}") //글 한개 볼때 return
     public ResponseEntity<?>  detail(@PathVariable("id") Long id) {
