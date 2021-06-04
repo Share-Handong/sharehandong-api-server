@@ -54,7 +54,7 @@ public class CommentController {
 
     @GetMapping("/comment/item/{itemIdx}")
     public ResponseEntity<?> list(Model model, @PathVariable("itemIdx")  Long itemIdx) {
-        List<CommentDto> commentDtoList = commentService.getCommentList();
+        List<CommentDto> commentDtoList = commentService.getCommentList(itemIdx);
         model.addAttribute("commentlist", commentDtoList);
         //return commentRepository.findAllByItemIdx(itemIdx);
         return ResponseEntity.ok(commentDtoList);

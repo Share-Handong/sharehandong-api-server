@@ -68,8 +68,9 @@ public class CommentService {
     }
 
     @Transactional
-    public List<CommentDto> getCommentList() {
-        List<Comment> commentList = commentRepository.findAll();
+    public List<CommentDto> getCommentList(Long itemIdx) {
+        List<Comment> commentList = commentRepository.findByItemIdx(itemIdx);
+//        List<Comment> commentList = commentRepository.findAll();
         List<CommentDto> commentDtoList = new ArrayList<>();
 
         for(Comment comment : commentList) {
