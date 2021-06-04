@@ -31,7 +31,7 @@ public class CommentController {
     private final ShareRepository shareRepository;
     private final CommentRepository commentRepository;
 
-    @PostMapping("/comment/item/{itemIdx}")
+    @PostMapping("/comment/item/{itemIdx}") //글을 쓸때도 필요가 없다.
     public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx, /*@AuthenticationPrincipal MyUserDetails userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
         ShareEntity post = shareRepository.findById(itemIdx).orElse(null);
         if(post == null) {
@@ -62,13 +62,17 @@ public class CommentController {
 
 
 
-    @PutMapping("/comment/item/{itemIdx}/{commentIdx}")
+    @PutMapping("/comment/item/{itemIdx}/{commentIdx}") //업데이트에는 유저 네임 필요없
     public void updateComment(@PathVariable("itemIdx")  Long itemIdx, @PathVariable("commentIdx")  Long commentIdx,
                               @RequestBody String comment) throws Exception {
         commentService.updateComment(commentIdx, comment);
     }
-    @DeleteMapping("/comment/item/{itemIdx}/{commentIdx}")
+
+
+    @DeleteMapping("/comment/item/{itemIdx}/{commentIdx}") //삭제 할떄도 유저 네임 필요가 없다.
     public void deleteComment(@PathVariable("itemIdx") Long itemIdx, @PathVariable("commentIdx") Long commentId) {//, @AuthenticationPrincipal UserDetailsImpl userDetails
         commentService.deleteComment(itemIdx ,commentId);//postId, , userDetails.getAccount().getId()
     }
+
+
 }

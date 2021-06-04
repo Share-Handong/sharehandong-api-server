@@ -79,8 +79,6 @@ public class ShareService {
         defaultShareDto.setContent(shareDto.getContent());
         defaultShareDto.setState(shareDto.getState());
         defaultShareDto.setTitle(shareDto.getTitle());
-        defaultShareDto.setWriter(shareDto.getWriter());
-
         return id;
     }
 
