@@ -52,7 +52,7 @@ public class UserEntity {
     @Column
     private Boolean isEnable;
 
-    @OneToMany(mappedBy = "post")
-    private Collection<ShareEntity> sharePosting;
+//    @OneToMany(mappedBy = "post")
+//    private Collection<ShareEntity> sharePosting;
 
 }

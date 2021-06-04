@@ -19,6 +19,7 @@ public class CommentDto {
     private String content;
     private LocalDateTime c_date;
     private int del;
+    private String userName;
 
     public Comment toEntity() {
         Comment build = Comment.builder()
@@ -32,12 +33,13 @@ public class CommentDto {
         return build;
     }
     @Builder
-    public CommentDto(Long idx, Long itemIdx, Long userIdx, String content, LocalDateTime c_date, int del) {
+    public CommentDto(Long idx, Long itemIdx, Long userIdx, String content, LocalDateTime c_date, int del, String userName) {
         this.idx = idx;
         this.itemIdx = itemIdx;
         this.userIdx = userIdx;
         this.content = content;
         this.c_date = c_date;
         this.del = del;
+        this.userName = userName;
     }
 }

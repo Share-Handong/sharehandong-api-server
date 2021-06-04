@@ -2,6 +2,7 @@ package sharehandong.sharehandongapiserver.api.v1.comment.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sharehandong.sharehandongapiserver.api.v1.comment.domain.Entity.Comment;
 import sharehandong.sharehandongapiserver.api.v1.comment.dto.CommentDto;
@@ -12,6 +13,7 @@ import sharehandong.sharehandongapiserver.api.v1.share.domain.entity.ShareEntity
 import sharehandong.sharehandongapiserver.api.v1.share.domain.repository.ShareRepository;
 import sharehandong.sharehandongapiserver.api.v1.share.dto.BoardDto;
 import sharehandong.sharehandongapiserver.api.v1.share.dto.ShareDto;
+import sharehandong.sharehandongapiserver.api.v1.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class CommentService {
 //        this.commentRepository = commentRepository;
 //        //this.shareRepository = shareRepository;
 //    }
+
+    @Autowired
+    UserRepository userRepository;
 
     @Transactional
     public void saveComment(/*Long userIdx,*/ Long itemIdx, CommentRequestDto commentRequestDto) {//ShareEntity shareEntity,, Account account
@@ -73,14 +78,18 @@ public class CommentService {
         List<CommentDto> commentDtoList = new ArrayList<>();
 
         for(Comment comment : commentList) {
-            CommentDto commentDto = CommentDto.builder()
-                    .idx(comment.getIdx())
-                    .itemIdx(comment.getItemIdx())
-                    .userIdx(comment.getUserIdx())
-                    .content(comment.getContent())
-                    .del(comment.getDel())
-                    .c_date(comment.getCDate())
-                    .build();
+            Long id = comment.getUserIdx();
+            String userName = userRepository.getOne(id).getUserName();
+
+//            CommentDto commentDto = CommentDto.builder()
+//                    .idx(comment.getIdx())
+//                    .itemIdx(comment.getItemIdx())
+//                    .userIdx(comment.getUserIdx())
+//                    .content(comment.getContent())
+//                    .del(comment.getDel())
+//                    .c_date(comment.getCDate())
+//                    .build();
+            CommentDto commentDto = new CommentDto(comment.getIdx(), comment.getItemIdx(), comment.getUserIdx(), comment.getContent(), comment.getCDate(),  comment.getDel(), userName);
             commentDtoList.add(commentDto);
         }
         return commentDtoList;
