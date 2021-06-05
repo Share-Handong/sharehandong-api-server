@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/share-handong?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    url: jdbc:mysql://b1f09a1440a512:94a88b05@us-cdbr-east-04.cleardb.com/heroku_7cb53baabdefd41?reconnect=true
+    url: jdbc:mysql://b1f09a1440a512:94a88b05@us-cdbr-east-04.cleardb.com/heroku_7cb53baabdefd41?reconnect=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
 #    username: root
 #    password: qwerasdf
     username: b1f09a1440a512
