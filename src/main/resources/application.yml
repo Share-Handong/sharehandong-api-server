@@ -27,5 +27,5 @@ logging:
               BasicBinder: TRACE
 
 server:
-  address: localhost
-  port: 8020
+#  address: localhost
+  port: 8080
