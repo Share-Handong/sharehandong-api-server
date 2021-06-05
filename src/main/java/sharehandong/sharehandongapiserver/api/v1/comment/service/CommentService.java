@@ -36,11 +36,12 @@ public class CommentService {
     UserRepository userRepository;
 
     @Transactional
-    public void saveComment(/*Long userIdx,*/ Long itemIdx, CommentRequestDto commentRequestDto) {//ShareEntity shareEntity,, Account account
+    public void saveComment(/*Long userIdx,*/ String userName, Long itemIdx, CommentRequestDto commentRequestDto) {//ShareEntity shareEntity,, Account account
+        Long id = userRepository.findByUserName(userName).getIdx();
 
         Comment comment = Comment.builder().content(commentRequestDto.getComment()).build();
         comment.setItemIdx(itemIdx);
-        //comment.setUserIdx(userIdx);
+        comment.setUserIdx(id);
         Comment newComment = commentRepository.save(comment);
         //shareEntity.addComment(newComment);
         //account.addComment(newComment);
@@ -90,7 +91,13 @@ public class CommentService {
 //                    .del(comment.getDel())
 //                    .c_date(comment.getCDate())
 //                    .build();
-            CommentDto commentDto = new CommentDto(comment.getIdx(), comment.getItemIdx(), comment.getUserIdx(), comment.getContent(), comment.getCDate(),  comment.getDel(), userName);
+            CommentDto commentDto = new CommentDto(
+                    comment.getIdx(),
+                    comment.getItemIdx(),
+                    comment.getUserIdx(),
+                    comment.getContent(),
+                    comment.getCDate(),
+                    comment.getDel(), userName);
             commentDtoList.add(commentDto);
         }
         return commentDtoList;

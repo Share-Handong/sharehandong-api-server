@@ -18,6 +18,7 @@ public class ShareDto {
     private Integer state;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String userName;
 
     public ShareEntity toEntity(){
         ShareEntity shareEntity = ShareEntity.builder()
@@ -33,7 +34,7 @@ public class ShareDto {
 
     @Builder
     public ShareDto(Long idx, String title, String content, Long writer, LocalDateTime createdAt, LocalDateTime updatedAt,
-                    Integer catego, Integer state) {
+                    Integer catego, Integer state, String userName) {
         this.idx = idx;
         this.writer = writer;
         this.title = title;
@@ -42,5 +43,6 @@ public class ShareDto {
         this.state = state;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.userName = userName;
     }
 }

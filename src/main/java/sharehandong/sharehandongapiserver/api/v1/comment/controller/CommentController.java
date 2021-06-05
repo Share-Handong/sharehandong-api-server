@@ -32,14 +32,16 @@ public class CommentController {
     private final CommentRepository commentRepository;
 
     @PostMapping("/comment/item/{itemIdx}") //글을 쓸때도 필요가 없다.
-    public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx, /*@AuthenticationPrincipal MyUserDetails userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity saveComment(@PathVariable("itemIdx")  Long itemIdx,
+                                      @RequestParam("userName") String userName,
+            /*@AuthenticationPrincipal MyUserDetails userDetails,*/ @RequestBody CommentRequestDto commentRequestDto) {
         ShareEntity post = shareRepository.findById(itemIdx).orElse(null);
         if(post == null) {
             System.out.println("post NULL");
             return ResponseEntity.badRequest().build();
         }
         //long userIdx = userDetails.getUserIdx();
-        commentService.saveComment(/*userIdx,*/itemIdx,commentRequestDto);//post, userDetails.getAccount()
+        commentService.saveComment(/*userIdx,*/userName, itemIdx,commentRequestDto);//post, userDetails.getAccount()
         return ResponseEntity.ok().build();
     }
 

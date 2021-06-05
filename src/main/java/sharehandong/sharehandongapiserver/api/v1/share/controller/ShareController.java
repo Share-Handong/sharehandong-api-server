@@ -13,6 +13,7 @@ import sharehandong.sharehandongapiserver.api.v1.share.service.FileService;
 import sharehandong.sharehandongapiserver.api.v1.share.service.ShareService;
 import sharehandong.sharehandongapiserver.api.v1.user.domain.entity.MyUserDetails;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 @RestController
@@ -28,11 +29,18 @@ public class ShareController {
 //    }
 
     @PostMapping("/share/item")// 글 등록 post
-    public ResponseEntity<?> write(@AuthenticationPrincipal MyUserDetails myUserDetails, ShareDto shareDto) {
-
-        return ResponseEntity.ok( new ItemDto(shareDto,myUserDetails.getUserName()));
+    public ResponseEntity<?> write(@RequestParam("userName") String userName, @RequestBody ShareDto shareDto) {
+        return ResponseEntity.ok( shareService.savePost(shareDto, userName));
     }
 
+
+    @GetMapping("/share/myitem") //내가 쓴 글
+    public ResponseEntity<?>  getMyShareList(@RequestParam("userName") String userName) {
+        List<ShareDto> shareDtoList =  shareService.getMyShareList(userName);
+//        model.addAttribute("postList", shareDtoList);
+//        model.addAttribute("post", shareDto);
+        return ResponseEntity.ok(shareDtoList);
+    }
 
     @GetMapping("/share/item/{id}") //글 한개 볼때 return
     public ResponseEntity<?>  detail(@PathVariable("id") Long id) {
